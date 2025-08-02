@@ -711,10 +711,10 @@
           for (const file of configFiles) {
             try {
               console.log(`[${new Date().toLocaleTimeString()}] 正在加载: ${file.path}`);
-              // 尝试使用绝对路径加载
-              const absolutePath = window.location.origin + '/' + file.path;
-              console.log(`[${new Date().toLocaleTimeString()}] 尝试绝对路径: ${absolutePath}`);
-              const response = await fetch(absolutePath);
+              // 使用相对路径加载，适应不同部署环境
+              const relativePath = file.path;
+              console.log(`[${new Date().toLocaleTimeString()}] 尝试相对路径: ${relativePath}`);
+              const response = await fetch(relativePath);
                
               if (!response.ok) {
                 console.error(`[${new Date().toLocaleTimeString()}] 响应状态码: ${response.status}, 状态文本: ${response.statusText}`);
