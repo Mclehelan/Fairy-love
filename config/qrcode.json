@@ -1,0 +1,22 @@
+{
+  "zh": [
+    {
+      "name": "TikTok",
+      "image": "images/products/Tiktok.jpg"
+    },
+    {
+      "name": "WhatsApp",
+      "image": "images/products/WhatsApp.jpg"
+    }
+  ],
+  "en": [
+    {
+      "name": "TikTok",
+      "image": "images/products/Tiktok.jpg"
+    },
+    {
+      "name": "WhatsApp",
+      "image": "images/products/WhatsApp.jpg"
+    }
+  ]
+}

@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="mobile-view">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fairy love | 美甲品牌</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 使用备用CDN加载Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#F8BBD0', // 粉色主色调
+            secondary: '#D4AF37', // 金色辅助色
+            accent: '#880E4F', // 深紫色强调色
+            light: '#FFF8E1', // 浅色背景
+            dark: '#3E2723' // 深色文本
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义样式 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .mobile-nav {
+        backdrop-filter: blur(10px);
+      }
+      .filter-active {
+        background-color: theme('colors.primary');
+        color: theme('colors.dark');
+      }
+      .step-active {
+        background-color: theme('colors.primary');
+        color: theme('colors.dark');
+      }
+      .lang-active {
+        background-color: theme('colors.primary');
+        color: theme('colors.dark');
+      }
+      .tag {
+        @apply px-2 py-1 rounded-full text-xs font-medium;
+      }
+    }
+  </style>
+  
+  <style>
+    /* 视图切换基础样式 */
+    .mobile-view .desktop-only {
+      display: none !important;
+    }
+    
+    .desktop-view .mobile-only {
+      display: none !important;
+    }
+    
+    /* 移动端默认样式 */
+    .mobile-view .container {
+      max-width: 100% !important;
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+    }
+    
+    /* 桌面端切换后样式 */
+    .desktop-view .container {
+      max-width: 1200px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+    
+    /* 平滑滚动 */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* 加载动画 */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    /* 步骤动画 */
+    .step-content {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    
+    .step-content.active {
+      display: block;
+    }
+    
+    /* 步骤滚动容器容器 */
+    .steps-container {
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    /* 步骤导航容器使用Flex布局 */
+    #steps-navigation {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* 移动端步骤条元素平均分配宽度 */
+    .mobile-view #steps-navigation {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .mobile-view .step-btn {
+      flex: 1;
+      min-width: 60px;
+      max-width: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .mobile-view .step-arrow {
+      flex: 0 0 20px;
+      text-align: center;
+    }
+
+    .mobile-view .step-connector {
+      display: none;
+    }
+    
+    .steps-container::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    .steps-container::-webkit-scrollbar-thumb {
+      background-color: theme('colors.primary');
+      border-radius: 2px;
+    }
+    
+    /* 步骤箭头样式 */
+    .step-arrow {
+      align-self: center;
+      color: #ccc;
+      font-size: 1.5rem;
+      margin: 0 2px;
+    }
+
+    /* 移动端步骤条优化 */
+    .mobile-view .step-btn {
+      padding: 2px;
+      min-width: 60px;
+    }
+
+    .mobile-view .step-btn span {
+      display: none;
+    }
+
+    .mobile-view .step-arrow {
+      font-size: 1rem;
+      margin: 0 1px;
+    }
+
+    .mobile-view .step-connector {
+      display: none;
+    }
+    
+    /* 步骤连接线 */
+    .step-connector {
+      height: 2px;
+      background-color: #ccc;
+      flex-grow: 1;
+      align-self: center;
+      margin: 0 4px;
+    }
+    
+    /* 语言切换动画 */
+    .lang-transition {
+      transition: opacity 0.3s ease;
+    }
+    
+    /* 修复筛选按钮圆角问题 */
+    .filter-btn {
+      border-radius: 9999px !important;
+    }
+    
+    /* 强制重绘临时类 */
+    .tmp-redraw {
+      opacity: 0.99;
+      transform: translateZ(0);
+    }
+  </style>
+</head>
+
+<body class="font-inter bg-light text-dark antialiased min-h-screen flex flex-col">
+    <script>
+      // 确保DOM完全加载后初始化
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM已完全加载，开始初始化...');
+        // 暂时注释掉init()调用，因为该函数尚未定义
+        // init();
+        // 直接调用必要的初始化函数
+        loadConfigData();
+      });
+    </script>
+  <!-- 语言切换按钮 -->
+  <div class="fixed top-4 left-4 z-50 flex rounded-full overflow-hidden shadow-md">
+    <button id="lang-zh" class="lang-btn px-3 py-2 bg-white text-dark lang-active" data-lang="zh">
+      中文
+    </button>
+    <button id="lang-en" class="lang-btn px-3 py-2 bg-gray-200 text-dark" data-lang="en">
+      English
+    </button>
+  </div>
+
+  <!-- 视图切换按钮 -->
+  <button id="view-toggle" class="fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-sm shadow-md rounded-full p-3 text-dark hover:bg-primary transition-colors">
+    <i class="fa fa-desktop"></i>
+  </button>
+
+  <!-- 导航栏 (桌面端) -->
+  <header id="navbar" class="fixed w-full z-40 transition-all duration-300 bg-transparent desktop-only">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="#home" class="text-2xl font-bold text-white text-shadow flex items-center">
+        <i class="fa fa-paint-brush mr-2"></i>
+        <span>Fairy love</span>
+      </a>
+      
+      <nav class="flex space-x-6">
+        <a href="#home" class="text-white hover:text-primary transition-colors">
+          <span class="lang-zh">首页</span>
+          <span class="lang-en hidden">Home</span>
+        </a>
+        <a href="#products" class="text-white hover:text-primary transition-colors">
+          <span class="lang-zh">美甲款式</span>
+          <span class="lang-en hidden">Nail Designs</span>
+        </a>
+        <a href="#process" class="text-white hover:text-primary transition-colors">
+          <span class="lang-zh">下单流程</span>
+          <span class="lang-en hidden">Order Process</span>
+        </a>
+        <a href="#contact" class="text-white hover:text-primary transition-colors">
+          <span class="lang-zh">联系我们</span>
+          <span class="lang-en hidden">Contact</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 英雄区域（顶部Banner） -->
+  <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0" id="top-banner-container">
+      <!-- 顶部Banner图片将通过JavaScript动态加载 -->
+      <img src="" alt="" class="w-full h-full object-cover" id="top-banner-image">
+      <div class="absolute inset-0 bg-dark/50"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 z-10 text-center">
+      <h1 class="text-[clamp(2rem,8vw,4rem)] font-bold text-white mb-6 leading-tight text-shadow animate-fade-in">
+        <span class="lang-zh">Fairy love<br>发现指尖上的艺术之美</span>
+        <span class="lang-en hidden">Fairy love<br>Discover the Art of Nails</span>
+      </h1>
+      <p class="text-[clamp(1rem,3vw,1.25rem)] text-white/90 mb-8 max-w-md mx-auto text-shadow animate-fade-in" style="animation-delay: 0.2s">
+        <span class="lang-zh">精选高端美甲款式，为您带来独一无二的指尖艺术体验</span>
+        <span class="lang-en hidden">Premium nail designs for a unique artistic experience at your fingertips</span>
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style="animation-delay: 0.4s">
+        <a href="#products" class="bg-primary hover:bg-primary/90 text-dark font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105">
+          <span class="lang-zh">浏览款式</span>
+          <span class="lang-en hidden">Browse Designs</span>
+        </a>
+        <a href="#process" class="bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold py-3 px-8 rounded-full transition-all">
+          <span class="lang-zh">了解流程</span>
+          <span class="lang-en hidden">Learn Process</span>
+        </a>
+      </div>
+    </div>
+    
+    <div class="absolute bottom-20 left-0 right-0 flex justify-center text-white animate-bounce z-20 mobile-only">
+      <a href="#products" class="text-3xl w-10 h-10 flex items-center justify-center">
+        <i class="fa fa-angle-down"></i>
+      </a>
+    </div>
+    <div class="absolute bottom-10 left-0 right-0 flex justify-center text-white animate-bounce z-20 desktop-only">
+      <a href="#products" class="text-3xl w-10 h-10 flex items-center justify-center">
+        <i class="fa fa-angle-down"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- 主内容区 -->
+  <main class="flex-grow pt-12">
+    <!-- 商品列表区域 -->
+    <section id="products" class="py-12 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-10">
+          <h2 class="text-[clamp(1.5rem,5vw,2.5rem)] font-bold text-dark mb-4">
+            <span class="lang-zh">精选美甲款式</span>
+            <span class="lang-en hidden">Featured Nail Designs</span>
+          </h2>
+          <p class="text-gray-600 max-w-md mx-auto">
+            <span class="lang-zh">每一款美甲都是我们设计师精心打造的艺术品</span>
+            <span class="lang-en hidden">Each nail design is a masterpiece crafted by our designers</span>
+          </p>
+        </div>
+        
+        <!-- 筛选选项 -->
+        <div class="mb-8">
+          <h3 class="text-lg font-bold mb-4">
+            <span class="lang-zh">筛选选项</span>
+            <span class="lang-en hidden">Filter Options</span>
+          </h3>
+          
+          <!-- 形状筛选 -->
+          <div class="mb-4">
+            <label class="block text-gray-700 font-medium mb-2">
+              <span class="lang-zh">按形状筛选:</span>
+              <span class="lang-en hidden">Filter by shape:</span>
+            </label>
+            </label>
+            <div class="flex flex-wrap gap-2" id="shape-filters">
+              <!-- 形状筛选按钮将通过JavaScript动态生成 -->
+              <div class="loading-indicator">
+                <span class="lang-zh">加载中...</span>
+                <span class="lang-en hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 标签筛选 -->
+          <div class="mb-4">
+            <label class="block text-gray-700 font-medium mb-2">
+              <span class="lang-zh">按标签筛选:</span>
+              <span class="lang-en hidden">Filter by tag:</span>
+            </label>
+            <div class="flex flex-wrap gap-2" id="tag-filters">
+              <!-- 标签筛选按钮将通过JavaScript动态生成 -->
+              <div class="loading-indicator">
+                <span class="lang-zh">加载中...</span>
+                <span class="lang-en hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 当前筛选条件显示 -->
+          <div class="mb-6 p-3 bg-gray-50 rounded-lg" id="filter-status">
+            <p class="text-sm text-gray-500">
+              <span class="lang-zh">当前筛选: 形状 - 全部, 标签 - 全部</span>
+              <span class="lang-en hidden">Current filters: Shape - All, Tag - All</span>
+            </p>
+          </div>
+          
+
+        </div>
+        
+        <!-- 商品网格 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
+          <!-- 商品将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="text-center mt-10">
+          <button id="load-more-btn" class="bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-dark font-semibold py-3 px-8 rounded-full transition-all">
+            <span class="lang-zh">加载更多款式</span>
+            <span class="lang-en hidden">Load More Designs</span>
+          </button>
+        </div>
+
+        <script>
+          // 为加载更多按钮添加点击事件
+          document.getElementById('load-more-btn').addEventListener('click', function() {
+            currentPage++;
+            renderProducts(filteredProducts, true);
+          });
+        </script>
+      </div>
+    </section>
+
+    <!-- 下单流程步骤板块 - 横版点按形式 -->
+    <section id="process" class="py-12 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-[clamp(1.5rem,5vw,2.5rem)] font-bold text-dark mb-4">
+            <span class="lang-zh">下单流程</span>
+            <span class="lang-en hidden">Order Process</span>
+          </h2>
+          <p class="text-gray-600 max-w-md mx-auto">
+            <span class="lang-zh">简单几步，即可拥有专属美甲艺术品</span>
+            <span class="lang-en hidden">Follow these simple steps to get your exclusive nail art</span>
+          </p>
+        </div>
+        
+        <!-- 步骤导航 - 将通过JavaScript动态生成 -->
+        <div class="steps-container mb-8">
+          <div class="flex min-w-max px-2" id="steps-navigation">
+            <!-- 步骤导航将通过JavaScript动态生成 -->
+          </div>
+        </div>
+        
+        <!-- 步骤内容 - 将通过JavaScript动态生成 -->
+        <div class="bg-white p-6 rounded-xl shadow shadow-md" id="steps-content-container">
+          <!-- 步骤内容将通过JavaScript动态生成 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 客户评价 -->
+    <section class="py-12 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-10">
+          <h2 class="text-[clamp(1.5rem,5vw,2.5rem)] font-bold text-dark mb-4">
+            <span class="lang-zh">客户评价</span>
+            <span class="lang-en hidden">Customer Reviews</span>
+          </h2>
+          <p class="text-gray-600 max-w-md mx-auto">
+            <span class="lang-zh">听听我们的客户怎么说，每一条评价都是对我们的肯定与鼓励</span>
+            <span class="lang-en hidden">Listen to what our customers say, each review is affirmation and encouragement to us</span>
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- 评价1 -->
+          <div class="bg-white p-6 rounded-xl shadow-md">
+            <div class="flex items items-center mb-4">
+              <img src="https://picsum.photos/id/64/100/100" alt="客户头像" class="w-12 h-12 rounded-full object-cover mr-4">
+              <div>
+                <h3 class="font-bold lang-zh">李小姐</h3>
+                <h3 class="font-bold lang-en hidden">Ms. Li</h3>
+                <div class="text-secondary">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600 italic text-sm lang-zh">
+              "做了闪耀钻石美甲，效果超出预期！设计师非常专业，细节处理得很到位，朋友们都问我在哪里做的。"
+            </p>
+            <p class="text-gray-600 italic text-sm lang-en hidden">
+              "I got the shining diamond nails, and the effect exceeded expectations! The designer is very professional, the details are handled very well, and my friends all asked me where I got them done."
+            </p>
+          </div>
+          
+          <!-- 评价2 -->
+          <div class="bg-white p-6 rounded-xl shadow-md">
+            <div class="flex items-center mb-4">
+              <img src="https://picsum.photos/id/65/100/100" alt="客户头像" class="w-12 h-12 rounded-full object-cover mr-4">
+              <div>
+                <h3 class="font-bold lang-zh">王女士</h3>
+                <h3 class="font-bold lang-en hidden">Ms. Wang</h3>
+                <div class="text-secondary">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-half-o"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600 italic text-sm lang-zh">
+              "选择了法式优雅美甲，非常适合我的职业形象。维持时间比我预期的长很多，已经成为常客了。"
+            </p>
+            <p class="text-gray-600 italic text-sm lang-en hidden">
+              "I chose the French elegant nails, which are very suitable for my professional image. They lasted much longer than I expected, and I have become a regular customer."
+            </p>
+          </div>
+          
+          <!-- 评价3 -->
+          <div class="bg-white p-6 rounded-xl shadow-md">
+            <div class="flex items-center mb-4">
+              <img src="https://picsum.photos/id/66/100/100" alt="客户头像" class="w-12 h-12 rounded-full object-cover mr-4">
+              <div>
+                <h3 class="font-bold lang-zh">张小姐</h3>
+                <h3 class="font-bold lang-en hidden">Ms. Zhang</h3>
+                <div class="text-secondary">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600 italic text-sm lang-zh">
+              "艺术彩绘美甲太惊艳了！设计师完全理解了我的想法，做出了独一无二的款式，每次抬手都很自豪。"
+            </p>
+            <p class="text-gray-600 italic text-sm lang-en hidden">
+              "The artistic painted nails are amazing! The designer fully understood my ideas and created a unique style. I am proud every time I raise my hand."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section id="contact" class="py-12 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-10">
+          <h2 class="text-[clamp(1.5rem,5vw,2.5rem)] font-bold text-dark mb-4">
+            <span class="lang-zh">联系我们</span>
+            <span class="lang-en hidden">Contact Us</span>
+          </h2>
+          <p class="text-gray-600 max-w-md mx-auto">
+            <span class="lang-zh">通过以下方式联系我们，我们将尽快回复</span>
+            <span class="lang-en hidden">Contact us through the following methods, and we will reply as soon as possible</span>
+          </p>
+        </div>
+        
+        <div class="bg-gray-50 p-6 rounded-xl shadow-md">
+          <div>
+            <h3 class="text-xl font-bold mb-4">
+              <span class="lang-zh">联系方式</span>
+              <span class="lang-en hidden">Contact Information</span>
+            </h3>
+            
+            <div class="space-y-4 mb-6" id="contact-info-section">
+              <!-- 联系方式将通过JavaScript动态加载 -->
+            </div>
+            
+            <h3 class="text-xl font-bold mb-3">
+              <span class="lang-zh">扫码联系我们</span>
+              <span class="lang-en hidden">Scan to Contact Us</span>
+            </h3>
+            <div class="grid grid-cols-2 gap-4 mb-6" id="qrcode-container">
+              <!-- 二维码将通过JavaScript动态加载 -->
+            </div>
+          </div>
+          
+          <!-- 底部banner图片 -->
+          <div class="mt-6" id="bottom-banner">
+            <!-- 底部banner将通过JavaScript动态加载 -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 移动端底部导航 -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white/90 mobile-nav shadow-lg z-40 mobile-only">
+    <div class="flex justify-around items-center h-16">
+      <a href="#home" class="flex flex-col items-center justify-center text-primary">
+        <i class="fa fa-home text-xl"></i>
+        <span class="text-xs mt-1 lang-zh">首页</span>
+        <span class="text-xs mt-1 lang-en hidden">Home</span>
+      </a>
+      <a href="#products" class="flex flex-col items-center justify-center text-gray-500 hover:text-primary transition-colors">
+        <i class="fa fa-th-large text-xl"></i>
+        <span class="text-xs mt-1 lang-zh">款式</span>
+        <span class="text-xs mt-1 lang-en hidden">Designs</span>
+      </a>
+      <a href="#process" class="flex flex-col items-center justify-center text-gray-500 hover:text-primary transition-colors">
+        <i class="fa fa-list-ol text-xl"></i>
+        <span class="text-xs mt-1 lang-zh">流程</span>
+        <span class="text-xs mt-1 lang-en hidden">Process</span>
+      </a>
+      <a href="#contact" class="flex flex-col items-center justify-center text-gray-500 hover:text-primary transition-colors">
+        <i class="fa fa-phone text-xl"></i>
+        <span class="text-xs mt-1 lang-zh">联系</span>
+        <span class="text-xs mt-1 lang-en hidden">Contact</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- 页脚 (桌面端) -->
+  <footer class="bg-dark text-white py-10 desktop-only">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div>
+          <h3 class="text-xl font-bold mb-4 flex items-center">
+            <i class="fa fa-paint-brush mr-2"></i>
+            <span>Fairy love</span>
+          </h3>
+          <p class="text-gray-400 mb-4 text-sm lang-zh">
+            专注于高端美甲服务，为您打造独一无二的指尖艺术体验。
+          </p>
+          <p class="text-gray-400 mb-4 text-sm lang-en hidden">
+            Specializing in high-end nail services, creating a unique artistic experience for your fingertips.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-primary transition-colors flex items-center">
+              <i class="fa fa-music text-xl mr-1"></i>
+              <span class="text-sm">TikTok</span>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-primary transition-colors flex items-center">
+              <i class="fa fa-whatsapp text-xl mr-1"></i>
+              <span class="text-sm">WhatsApp</span>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="font-bold mb-4 lang-zh">快速链接</h4>
+          <h4 class="font-bold mb-4 lang-en hidden">Quick Links</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#home" class="text-gray-400 hover:text-primary transition-colors">
+              <span class="lang-zh">首页</span>
+              <span class="lang-en hidden">Home</span>
+            </a></li>
+            <li><a href="#products" class="text-gray-400 hover:text-primary transition-colors">
+              <span class="lang-zh">美甲款式</span>
+              <span class="lang-en hidden">Nail Designs</span>
+            </a></li>
+            <li><a href="#process" class="text-gray-400 hover:text-primary transition-colors">
+              <span class="lang-zh">下单流程</span>
+              <span class="lang-en hidden">Order Process</span>
+            </a></li>
+            <li><a href="#contact" class="text-gray-400 hover:text-primary transition-colors">
+              <span class="lang-zh">联系我们</span>
+              <span class="lang-en hidden">Contact</span>
+            </a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-bold mb-4 lang-zh">服务项目</h4>
+          <h4 class="font-bold mb-4 lang-en hidden">Services</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors lang-zh">基础美甲</a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors lang-en hidden">Basic Manicure</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors lang-zh">精致美甲</a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors lang-en hidden">Deluxe Manicure</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors lang-zh">奢华美甲</a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors lang-en hidden">Luxury Manicure</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors lang-zh">艺术彩绘</a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors lang-en hidden">Artistic Painting</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors lang-zh">美甲护理</a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors lang-en hidden">Nail Care</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 pt-6 text-center text-gray-500 text-xs">
+        <p class="lang-zh">&copy; 2023 Fairy love. 保留所有权利。</p>
+        <p class="lang-en hidden">&copy; 2023 Fairy love. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 规格详情模态框 -->
+  <div id="spec-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#c07489] rounded-xl max-w-2xl w-full max-h-[80vh] flex flex-col">
+      <div class="p-4 border-b sticky top-0 bg-white z-10">
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-bold" id="modal-title">
+            <span class="lang-zh">规格详情</span>
+            <span class="lang-en hidden">Specification Details</span>
+          </h3>
+          <button id="close-modal" class="text-gray-500 hover:text-dark">
+            <i class="fa fa-times text-xl"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 overflow-y-auto flex-grow" id="modal-content">
+        <!-- 动态填充内容 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+        // 从配置文件加载数据
+    async function loadConfigData() {
+        try {
+          console.log('===== 开始加载JSON配置文件 =====');
+              console.log('当前时间:', new Date().toLocaleString());
+          
+          // 配置文件列表
+          const configFiles = [
+            { name: 'topBanner', path: 'config/top-banner.json' },
+            { name: 'process', path: 'config/process.json' },
+            { name: 'product', path: 'config/products.json' },  // 修改为单数形式，以匹配window.productData
+            { name: 'specifications', path: 'config/specifications.json' },
+            { name: 'contact', path: 'config/contact.json' },
+            { name: 'qrcode', path: 'config/qrcode.json' },
+            { name: 'banner', path: 'config/footer-banner.json' }
+          ];
+          
+          // 逐一加载并显示状态
+          for (const file of configFiles) {
+            try {
+              console.log(`[${new Date().toLocaleTimeString()}] 正在加载: ${file.path}`);
+              // 尝试使用绝对路径加载
+              const absolutePath = window.location.origin + '/' + file.path;
+              console.log(`[${new Date().toLocaleTimeString()}] 尝试绝对路径: ${absolutePath}`);
+              const response = await fetch(absolutePath);
+               
+              if (!response.ok) {
+                console.error(`[${new Date().toLocaleTimeString()}] 响应状态码: ${response.status}, 状态文本: ${response.statusText}`);
+                throw new Error(`加载失败，状态码: ${response.status}, 状态文本: ${response.statusText}`);
+              }
+               
+              const data = await response.json();
+              window[file.name + 'Data'] = data; // 存储到全局变量
+              console.log(`[${new Date().toLocaleTimeString()}] ✅ 成功加载: ${file.path}`);
+              if (file.name === 'product') {
+                console.log(`[${new Date().toLocaleTimeString()}] 产品数据数量:`, Object.keys(window.productData || {}).length);
+                console.log(`[${new Date().toLocaleTimeString()}] 产品数据内容:`, window.productData);
+              }
+            } catch (fetchError) {
+                console.error(`[${new Date().toLocaleTimeString()}] ❌ 加载${file.path}失败:`, fetchError.message);
+              // 对于products文件，尝试直接赋值而不是终止加载
+              if (file.name === 'product') {
+                console.log(`[${new Date().toLocaleTimeString()}] 尝试直接使用手动注入的products数据...`);
+                try {
+                  // 这里直接使用我们知道的正确数据结构
+                  console.log(`[${new Date().toLocaleTimeString()}] 开始手动注入商品数据...`);
+                  window.productData = {
+                    "粉色渐变美甲": {
+                      "txtContent": {
+                        "zh": {
+                          "商品名称": "粉色渐变美甲",
+                          "规格库编号": "FL001",
+                          "编号": "1",
+                          "价格": "¥178",
+                          "形状": "圆形",
+                          "标签": ["渐变", "粉色", "少女心"]
+                        },
+                        "en": {
+                          "商品名称": "Pink Gradient Nails",
+                          "规格库编号": "FL001",
+                          "Number": "1",
+                          "价格": "$168",
+                          "形状": "Round",
+                          "标签": ["Gradient", "Pink", "Feminine"]
+                        }
+                      },
+                      "image": "images/products/product_1060.jpg"
+                    },
+                    "法式优雅美甲": {
+                      "txtContent": {
+                        "zh": {
+                          "商品名称": "法式优雅美甲",
+                          "规格库编号": "FL002",
+                          "编号": "2",
+                          "价格": "¥198",
+                          "形状": "方形",
+                          "标签": ["法式", "优雅", "百搭"]
+                        },
+                        "en": {
+                          "商品名称": "French Elegance Nails",
+                          "规格库编号": "FL002",
+                          "Number": "2",
+                          "价格": "$198",
+                          "形状": "Square",
+                          "标签": ["French", "Elegant", "Versatile"]
+                        }
+                      },
+                      "image": "images/products/product_1061.jpg"
+                    },
+                    "复古格纹美甲": {
+                      "txtContent": {
+                        "zh": {
+                          "商品名称": "复古格纹美甲",
+                          "规格库编号": "FL003",
+                          "编号": "3",
+                          "价格": "¥228",
+                          "形状": "杏仁形",
+                          "标签": ["格纹", "复古", "秋冬"]
+                        },
+                        "en": {
+                          "商品名称": "Vintage Plaid Nails",
+                          "规格库编号": "FL003",
+                          "Number": "3",
+                          "价格": "$228",
+                          "形状": "Almond",
+                          "标签": ["Plaid", "Vintage", "Autumn"]
+                        }
+                      },
+                      "image": "images/products/product_1062.jpg"
+                    },
+                    "艺术彩绘美甲": {
+                      "txtContent": {
+                        "zh": {
+                          "商品名称": "艺术彩绘美甲",
+                          "规格库编号": "FL004",
+                          "编号": "4",
+                          "价格": "¥268",
+                          "形状": "椭圆形",
+                          "标签": ["彩绘", "艺术", "独特"]
+                        },
+                        "en": {
+                          "商品名称": "Artistic Painted Nails",
+                          "规格库编号": "FL004",
+                          "Number": "4",
+                          "价格": "$268",
+                          "形状": "Oval",
+                          "标签": ["Painted", "Artistic", "Unique"]
+                        }
+                      },
+                      "image": "images/products/product_1063.jpg"
+                    },
+                    "圣诞主题美甲": {
+                      "txtContent": {
+                        "zh": {
+                          "商品名称": "圣诞主题美甲",
+                          "规格库编号": "FL005",
+                          "编号": "5",
+                          "价格": "¥238",
+                          "形状": "圆形",
+                          "标签": ["圣诞", "节日", "红色"]
+                        },
+                        "en": {
+                          "商品名称": "Christmas Theme Nails",
+                          "规格库编号": "FL005",
+                          "Number": "5",
+                          "价格": "$238",
+                          "形状": "Round",
+                          "标签": ["Christmas", "Holiday", "Red"]
+                        }
+                      },
+                      "image": "images/products/product_1064.jpg"
+                    }
+                  };
+                  console.log('✅ 已手动设置产品数据，数量:', Object.keys(window.productData).length);
+                  console.log('手动设置的产品数据内容:', window.productData);
+                } catch (e) {
+                  console.error('❌ 手动设置产品数据失败:', e.message);
+                  throw new Error(`关键文件${file.path}加载失败`);
+                }
+              } else {
+                throw new Error(`关键文件${file.path}加载失败`); // 终止加载
+              }
+            }
+          }
+          
+          console.log('所有JSON配置文件加载成功！');
+
+          // 确认使用从JSON加载的产品数据
+          if (Object.keys(window.productData).length > 0) {
+            productData = window.productData;
+            console.log('使用从JSON加载的产品数据，数量:', Object.keys(productData).length);
+          } else {
+            console.warn('未加载到产品数据，使用默认数据');
+          }
+
+          // 显式将window.processData赋值给processData
+          processData = window.processData;
+          console.log('显式赋值后流程数据数量:', Object.keys(processData || {}).length);
+
+          // 显式将window.qrcodeData赋值给qrcodeData
+          qrcodeData = window.qrcodeData;
+          console.log('显式赋值后二维码数据数量:', Object.keys(qrcodeData || {}).length);
+
+          // 显式将window.contactData赋值给contactData
+          contactData = window.contactData;
+          console.log('显式赋值后联系数据数量:', Object.keys(contactData || {}).length);
+
+          // 显式将window.specificationsData赋值给specificationData
+          specificationData = window.specificationsData;
+          console.log('显式赋值后规格数据数量:', Object.keys(specificationData || {}).length);
+
+          // 显式将window.bannerData赋值给footerBannerData
+          footerBannerData = window.bannerData;
+          console.log('显式赋值后底部横幅数据:', Object.keys(footerBannerData || {}).length);
+
+          // 输出产品数据，查看是否正确加载
+          console.log('产品数据是否存在:', Object.keys(productData).length > 0);
+          console.log('产品数据数量:', Object.keys(productData).length);
+          console.log('产品数据:', productData);
+          console.log('window.productData === productData:', window.productData === productData);
+
+          // 数据加载完成后渲染页面元素
+          renderTopBanner();
+          renderProcessSteps();
+          extractAndRenderFilters(); // 提取并渲染筛选项
+          renderProducts();
+          renderContactInfo();
+          renderQrcodes();
+          renderBanner();
+          
+        } catch (error) {
+          console.error('❌ 配置文件加载失败:', error.message);
+          console.log('⚠️ 正在使用默认数据...');
+          useDefaultData();
+        }
+      }
+    
+    // 从商品数据中提取并渲染筛选项
+    function extractAndRenderFilters() {
+      // 如果没有商品数据，使用默认数据
+      if (Object.keys(productData).length === 0) {
+        useDefaultData();
+      }
+      
+      // 提取所有独特的形状和标签（根据当前语言）
+      console.log('商品数据数量:', Object.keys(productData).length);
+      const shapes = new Set();
+      const tags = new Set();
+      
+      Object.values(productData).forEach(product => {
+        // 只使用当前语言的数据
+        const currentData = product.txtContent?.[currentLang] || product.txtContent?.['zh'] || {};
+        
+        // 添加形状
+        if (currentData.形状) shapes.add(currentData.形状);
+        
+        // 添加标签
+        if (currentData.标签) currentData.标签.forEach(tag => tags.add(tag));
+      });
+      
+      // 获取筛选容器
+      const shapeFilters = document.getElementById('shape-filters');
+      const tagFilters = document.getElementById('tag-filters');
+      
+      // 清空加载指示器
+      shapeFilters.innerHTML = '';
+      tagFilters.innerHTML = '';
+      
+      // 创建形状筛选按钮
+      console.log('提取的形状数量:', shapes.size);
+      console.log('提取的形状:', Array.from(shapes));
+      console.log('提取的标签数量:', tags.size);
+      console.log('提取的标签:', Array.from(tags));
+      addFilterButtons(shapeFilters, Array.from(shapes), 'shape');
+      
+      // 创建标签筛选按钮
+      addFilterButtons(tagFilters, Array.from(tags), 'tag');
+    }
+    
+    // 为筛选容器添加按钮
+    function addFilterButtons(container, items, filterType) {
+      // 添加"全部"按钮
+      const allButton = document.createElement('button');
+      allButton.className = `filter-btn px-3 py-1 bg-gray-200 hover:bg-primary transition-colors text-sm filter-active`;
+      allButton.setAttribute('data-' + filterType, 'all');
+      // 根据当前语言设置按钮文本可见性
+      allButton.innerHTML = `
+        <span class="lang-zh ${currentLang === 'en' ? 'hidden' : ''}">全部</span>
+        <span class="lang-en ${currentLang === 'zh' ? 'hidden' : ''}">All</span>
+      `;
+      
+      allButton.addEventListener('click', () => {
+        // 更新按钮状态
+        container.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.classList.remove('filter-active');
+        });
+        allButton.classList.add('filter-active');
+        
+        // 更新当前筛选值
+        if (filterType === 'shape') {
+          currentShapeFilter = 'all';
+        } else if (filterType === 'tag') {
+          currentTagFilter = 'all';
+        }
+        applyFilters();
+      });
+      
+      container.appendChild(allButton);
+      
+      // 添加各项筛选按钮
+      items.forEach(item => {
+        const button = document.createElement('button');
+        button.className = `filter-btn px-3 py-1 bg-gray-200 hover:bg-primary transition-colors text-sm`;
+        // 处理标签名中的特殊字符，确保生成有效的data属性名
+        const validItem = item.replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-');
+        button.setAttribute('data-' + filterType, validItem);
+        
+        // 为筛选按钮添加中英文翻译
+        // 这里假设英文翻译是直接使用商品数据中的英文值
+        // 在实际应用中，可能需要从翻译文件或数据库中获取
+        const isEnglish = currentLang === 'en';
+        const zhText = item; // 中文文本
+        let enText = item; // 默认使用中文文本作为英文文本
+        
+        // 尝试从商品数据中获取英文翻译
+        Object.values(productData).forEach(product => {
+          const zhData = product.txtContent?.['zh'] || {};
+          const enData = product.txtContent?.['en'] || {};
+          
+          if (filterType === 'shape') {
+            // 如果当前是中文形状值，查找对应的英文形状值
+            if (zhData.形状 === item && enData.形状) {
+              enText = enData.形状;
+            }
+          } else if (filterType === 'tag') {
+            // 如果当前是中文标签值，查找对应的英文标签值
+            if (zhData.标签?.includes(item) && enData.标签) {
+              // 找到中文标签在数组中的索引，然后获取对应的英文标签
+              const index = zhData.标签.indexOf(item);
+              if (index !== -1 && enData.标签[index]) {
+                enText = enData.标签[index];
+              }
+            }
+          }
+        });
+        
+        button.innerHTML = `
+          <span class="lang-zh ${isEnglish ? 'hidden' : ''}">${zhText}</span>
+          <span class="lang-en ${isEnglish ? '' : 'hidden'}">${enText}</span>
+        `;
+        
+        button.addEventListener('click', () => {
+          // 更新按钮状态
+          container.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('filter-active');
+          });
+          button.classList.add('filter-active');
+          
+          // 更新当前筛选值
+          let filterValue = item;
+          
+          // 如果当前是英文，尝试获取英文值
+          if (currentLang === 'en') {
+            // 查找对应的英文翻译
+            Object.values(productData).forEach(product => {
+              const zhData = product.txtContent?.['zh'] || {};
+              const enData = product.txtContent?.['en'] || {};
+              
+              if (filterType === 'shape') {
+                // 形状筛选
+                if (zhData.形状 === item && enData.形状) {
+                  filterValue = enData.形状;
+                }
+              } else if (filterType === 'tag') {
+                // 标签筛选
+                if (zhData.标签?.includes(item) && enData.标签) {
+                  const index = zhData.标签.indexOf(item);
+                  if (index !== -1 && enData.标签[index]) {
+                    filterValue = enData.标签[index];
+                  }
+                }
+              }
+            });
+          }
+          
+          if (filterType === 'shape') {
+            currentShapeFilter = filterValue;
+          } else if (filterType === 'tag') {
+            currentTagFilter = filterValue;
+          }
+          applyFilters();
+        });
+        
+        container.appendChild(button);
+      });
+    }
+    
+    // 使用默认数据作为备用方案
+    function useDefaultData() {
+      // 顶部Banner默认数据
+      topBannerData = {
+        "zh": {
+          "image": "images/banners/banner_237.jpg",
+          "altText": "Fairy love 精美美甲展示"
+        },
+        "en": {
+          "image": "images/banners/banner_237.jpg",
+          "altText": "Fairy love exquisite nail art display"
+        }
+      };
+      
+      // 流程默认数据 - 4个步骤
+      processData = {
+        "zh": [
+          {
+            "step": 1,
+            "title": "浏览款式并选择喜欢的设计",
+            "shortTitle": "选择款式",
+            "icon": "fa-th-large",
+            "description": "在我们的款式展示中浏览各种精美的美甲设计，找到您喜欢的款式并记录下对应的编号。",
+            "image": "images/products/product_1025.jpg",
+            "tips": "您可以根据形状、风格和难度进行筛选"
+          },
+          {
+            "step": 2,
+            "title": "通过社交媒体联系我们",
+            "shortTitle": "联系我们",
+            "icon": "fa-comments",
+            "description": "通过TikTok或WhatsApp联系我们的客服，告知您选择的款式编号和收货地址。",
+            "image": "images/products/product_1062.jpg",
+            "tips": "工作时间：周一至周日 10:00-22:00"
+          },
+          {
+            "step": 3,
+            "title": "确认订单并完成支付",
+            "shortTitle": "确认支付",
+            "icon": "fa-check-circle",
+            "description": "我们会与您确认订单详情，包括款式、价格和配送信息。确认后请完成支付流程。",
+            "image": "images/products/product_1063.jpg",
+            "tips": "支持多种支付方式，支付成功后将发送订单确认"
+          },
+          {
+            "step": 4,
+            "title": "制作完成并安排发货",
+            "shortTitle": "发货配送",
+            "icon": "fa-truck",
+            "description": "我们会在约定时间内完成美甲制作，并通过快递发送给您，同时提供物流追踪信息。",
+            "image": "images/products/product_1064.jpg",
+            "tips": "一般3-5个工作日送达，偏远地区可能延迟1-2天"
+          }
+        ],
+        "en": [
+          {
+            "step": 1,
+            "title": "Browse designs and choose your favorite",
+            "shortTitle": "Choose Design",
+            "icon": "fa-th-large",
+            "description": "Browse through our collection of exquisite nail designs, find your favorite and note down the corresponding ID.",
+            "image": "images/products/product_1025.jpg",
+            "tips": "You can filter by shape, style and difficulty"
+          },
+          {
+            "step": 2,
+            "title": "Contact us via social media",
+            "shortTitle": "Contact Us",
+            "icon": "fa-comments",
+            "description": "Contact our customer service via TikTok or WhatsApp, inform us of your chosen design ID and delivery address.",
+            "image": "images/products/product_1062.jpg",
+            "tips": "Working hours: Monday to Sunday 10:00-22:00"
+          },
+          {
+            "step": 3,
+            "title": "Confirm order and complete payment",
+            "shortTitle": "Payment",
+            "icon": "fa-check-circle",
+            "description": "We will confirm your order details, including design, price and delivery information. Please complete the payment process after confirmation.",
+            "image": "images/products/product_1063.jpg",
+            "tips": "Multiple payment methods are supported, and an order confirmation will be sent after successful payment"
+          },
+          {
+            "step": 4,
+            "title": "Production complete and shipping arranged",
+            "shortTitle": "Shipping",
+            "icon": "fa-truck",
+            "description": "We will complete the nail production within the agreed time and send it to you by express, with logistics tracking information provided.",
+            "image": "images/products/product_1064.jpg",
+            "tips": "Generally delivered within 3-5 working days, remote areas may be delayed by 1-2 days"
+          }
+        ]
+      };
+      
+      // 商品默认数据
+      productData = {
+        "粉色渐变美甲": {
+          "txtContent": {
+            "zh": {
+              "商品名称": "粉色渐变美甲",
+              "规格库编号": "FL001",
+              "价格": "¥168",
+              "形状": "圆形",
+              "标签": ["渐变", "粉色", "少女心"],
+              "制作难度": "简单"
+            },
+            "en": {
+              "商品名称": "Pink Gradient Nails",
+              "规格库编号": "FL001",
+              "价格": "¥168",
+              "形状": "Round",
+              "标签": ["Gradient", "Pink", "Feminine"],
+              "制作难度": "Easy"
+            }
+          },
+          "image": "images/products/product_1060.jpg"
+        },
+        "法式优雅美甲": {
+          "txtContent": {
+            "zh": {
+              "商品名称": "法式优雅美甲",
+              "规格库编号": "FL002",
+              "价格": "¥198",
+              "形状": "方形",
+              "标签": ["法式", "优雅", "百搭"],
+              "制作难度": "中等"
+            },
+            "en": {
+              "商品名称": "French Elegance Nails",
+              "规格库编号": "FL002",
+              "价格": "¥198",
+              "形状": "Square",
+              "标签": ["French", "Elegant", "Versatile"],
+              "制作难度": "Medium"
+            }
+          },
+          "image": "images/products/product_1061.jpg"
+        }
+      };
+      
+      // 规格详情默认数据
+      specificationData = {
+        "FL001": {
+          "images": [
+            "images/products/product_1060.jpg",
+            "images/products/product_1061.jpg",
+            "images/products/product_1062.jpg"
+          ]
+        },
+        "FL002": {
+          "images": [
+            "images/products/product_1063.jpg",
+            "images/products/product_1064.jpg"
+          ]
+        }
+      };
+      
+      // 底部Banner默认数据
+      bannerData = {
+        "zh": {
+          "image": "images/banners/banner_1040.jpg",
+          "altText": "Fairy love 美甲优惠活动"
+        },
+        "en": {
+          "image": "images/banners/banner_1040.jpg",
+          "altText": "Fairy love nail promotion"
+        }
+      };
+      
+      // 二维码默认数据
+      qrcodeData = {
+        "zh": [
+          {
+            "name": "TikTok",
+            "image": "images/products/product_1074.jpg"
+          },
+          {
+            "name": "WhatsApp",
+            "image": "images/products/product_1075.jpg"
+          }
+        ],
+        "en": [
+          {
+            "name": "TikTok",
+            "image": "images/products/product_1074.jpg"
+          },
+          {
+            "name": "WhatsApp",
+            "image": "images/products/product_1075.jpg"
+          }
+        ]
+      };
+      
+      // 联系方式默认数据
+      contactData = {
+        "zh": [
+          {
+            "title": "TikTok",
+            "content": "@fairylove_nail",
+            "icon": "fa-music"
+          },
+          {
+            "title": "WhatsApp",
+            "content": "+86 138 0000 0000",
+            "icon": "fa-whatsapp"
+          }
+        ],
+        "en": [
+          {
+            "title": "TikTok",
+            "content": "@fairylove_nail",
+            "icon": "fa-music"
+          },
+          {
+            "title": "WhatsApp",
+            "content": "+86 138 0000 0000",
+            "icon": "fa-whatsapp"
+          }
+        ]
+      };
+      
+      // 渲染默认数据
+      renderTopBanner();
+      renderProcessSteps();
+      extractAndRenderFilters(); // 提取并渲染筛选项
+      renderProducts();
+      renderContactInfo();
+      renderQrcodes();
+      renderBanner();
+    }
+    
+    // 处理图片路径的辅助函数
+    function getImagePath(image) {
+      // 日志输出：查看输入的图片路径
+      console.log('原始图片路径:', image);
+      
+      if (!image) {
+        console.log('图片路径为空，返回空字符串');
+        return '';
+      }
+      
+      // 标准化路径分隔符为正斜杠
+      const normalizedImage = image.replace(/\\/g, '/');
+      console.log('标准化后的路径:', normalizedImage);
+      
+      // 添加时间戳防止缓存
+      const cacheBuster = `?t=${new Date().getTime()}`;
+      
+      // 如果是完整URL，则直接返回
+      if (normalizedImage.startsWith('http://') || normalizedImage.startsWith('https://')) {
+        console.log('使用外部URL:', normalizedImage);
+        return normalizedImage + cacheBuster;
+      }
+      
+      // 如果图片路径已经包含images/，则直接返回
+      if (normalizedImage.startsWith('images/')) {
+        console.log('使用已有路径:', normalizedImage);
+        return normalizedImage + cacheBuster;
+      }
+      // 否则添加正确的前缀
+      const finalPath = `images/products/${normalizedImage}${cacheBuster}`;
+      console.log('生成最终路径(带防缓存参数):', finalPath);
+      return finalPath;
+    }
+
+    // 添加图片加载失败处理
+    function setupImageErrorHandling(imgElement) {
+      console.log('设置图片错误处理:', imgElement.src);
+      
+      // 定义错误处理函数
+      function handleError() {
+        console.error('图片加载失败:', this.src);
+        // 显示加载失败信息
+        this.alt = '图片加载失败';
+        // 添加加载失败的样式
+        this.classList.add('image-loading-error');
+        // 移除错误事件监听器，防止无限循环
+        this.removeEventListener('error', handleError);
+        // 替换为本地的加载失败图片
+        const errorImagePath = 'images/loading-error.png';
+        console.log('替换为错误图片:', errorImagePath);
+        this.src = errorImagePath;
+      }
+      
+      // 添加错误事件监听器
+      imgElement.addEventListener('error', handleError);
+    }
+
+    // 渲染顶部banner
+    function renderTopBanner() {
+      const topBannerImage = document.getElementById('top-banner-image');
+      if (!topBannerImage) return;
+      
+      // 增加安全检查：确保数据存在
+      // 明确使用window.topBannerData以避免作用域问题
+      const topBannerData = window.topBannerData || {};
+      const langData = topBannerData[currentLang] || topBannerData['zh'] || {};
+      const imageUrl = langData.image || 'images/banners/top-banner.jpg'; // 提供默认图片路径
+      
+      // 设置图片源和替代文本
+      topBannerImage.src = getImagePath(imageUrl);
+      topBannerImage.alt = langData.altText || 'Fairy love nail art';
+      
+      // 添加图片加载失败处理
+      setupImageErrorHandling(topBannerImage);
+      
+      // 日志输出，帮助调试
+      console.log('渲染顶部横幅:', imageUrl);
+    }
+    
+    // 渲染下单流程步骤条和内容
+    function renderProcessSteps() {
+      const stepsNavigation = document.getElementById('steps-navigation');
+      const stepsContentContainer = document.getElementById('steps-content-container');
+      
+      // 清空现有内容
+      stepsNavigation.innerHTML = '';
+      stepsContentContainer.innerHTML = '';
+      
+      // 获取当前语言的流程数据
+      const steps = processData[currentLang] || processData['zh'] || [
+        {
+          "step": 1,
+          "title": "浏览款式并选择喜欢的设计",
+          "shortTitle": "选择款式",
+          "icon": "fa-th-large",
+          "description": "在我们的款式展示中浏览各种精美的美甲设计，找到您喜欢的款式并记录下对应的编号。",
+          "image": "",
+          "tips": "您可以根据形状、风格和难度进行筛选"
+        },
+        {
+          "step": 2,
+          "title": "通过社交媒体联系我们",
+          "shortTitle": "联系我们",
+          "icon": "fa-comments",
+          "description": "通过TikTok或WhatsApp联系我们的客服，告知您选择的款式编号和收货地址。",
+          "image": "",
+          "tips": "工作时间：周一至周日 10:00-22:00"
+        },
+        {
+          "step": 3,
+          "title": "确认订单并完成支付",
+          "shortTitle": "确认支付",
+          "icon": "fa-check-circle",
+          "description": "我们会与您确认订单详情，包括款式、价格和配送信息。确认后请完成支付流程。",
+          "image": "",
+          "tips": "支持多种支付方式，支付成功后将发送订单确认"
+        },
+        {
+          "step": 4,
+          "title": "制作完成并安排发货",
+          "shortTitle": "发货配送",
+          "icon": "fa-truck",
+          "description": "我们会在约定时间内完成美甲制作，并通过快递发送给您，同时提供物流追踪信息。",
+          "image": "",
+          "tips": "一般3-5个工作日送达，偏远地区可能延迟1-2天"
+        }
+      ];
+      
+      // 生成步骤导航和内容
+      steps.forEach((step, index) => {
+        // 创建步骤按钮
+        const stepButton = document.createElement('button');
+        stepButton.className = `step-btn flex flex-col items-center px-4 py-3 rounded-lg transition-all ${index === 0 ? 'step-active' : ''}`;
+        stepButton.setAttribute('data-step', step.step);
+        stepButton.innerHTML = `
+          <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-lg mb-1 ${index === 0 ? 'step-active' : ''}">
+            <i class="fa ${step.icon || 'fa-question'}"></i>
+          </div>
+          <span class="text-xs text-center">Step ${step.step}: ${step.shortTitle || '步骤'}</span>
+        `;
+        
+        // 添加点击事件
+        stepButton.addEventListener('click', () => {
+          showStep(step.step);
+        });
+        
+        // 添加步骤按钮到导航容器
+        stepsNavigation.appendChild(stepButton);
+        
+        // 添加步骤连接线和箭头（最后一步不需要）
+        if (index < steps.length - 1) {
+          stepsNavigation.appendChild(createStepConnector());
+          stepsNavigation.appendChild(createStepArrow());
+          stepsNavigation.appendChild(createStepConnector());
+        }
+        
+        // 创建步骤内容
+        const stepContent = document.createElement('div');
+        stepContent.className = `step-content ${index === 0 ? 'active' : ''}`;
+        stepContent.setAttribute('data-step', step.step);
+        stepContent.innerHTML = `
+          <h3 class="text-xl font-bold mb-4">Step ${step.step}: ${step.title || '步骤说明'}</h3>
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="md:w-1/3">
+              <!-- 从配置数据获取图片路径并添加前缀 -->
+              <!-- 使用aspect-ratio保持一致的宽高比例，以PC端为准 -->
+            <div class="relative w-full aspect-[4/3] border border-gray-200 rounded-lg overflow-hidden">
+              ${step.image ? `
+                <img src="${getImagePath(step.image)}" 
+                     alt="${step.title || '步骤图片'}" 
+                     class="w-full h-full object-cover" onload="setupImageErrorHandling(this)">
+              ` : `
+                <img src="" 
+                     alt="无图片数据" 
+                     class="w-full h-full" onload="setupImageErrorHandling(this)">
+                <div class="absolute inset-0 flex items-center justify-center bg-gray-50">
+                  <p class="text-center text-gray-500">图片加载失败</p>
+                </div>
+              `}
+              </div>
+            </div>
+            <div class="md:w-2/3">
+              <p class="text-gray-600 mb-4">${step.description || '步骤描述信息'}</p>
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-bold mb-2">Tips：</h4>
+                <p class="text-sm text-gray-600">${step.tips || '相关提示信息'}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // 添加步骤内容到内容容器
+        stepsContentContainer.appendChild(stepContent);
+      });
+    }
+    
+    // 创建步骤连接线
+    function createStepConnector() {
+      const connector = document.createElement('div');
+      connector.className = 'step-connector';
+      return connector;
+    }
+    
+    // 创建步骤箭头
+    function createStepArrow() {
+      const arrow = document.createElement('div');
+      arrow.className = 'step-arrow';
+      arrow.innerHTML = '<i class="fa fa-long-arrow-right"></i>';
+      return arrow;
+    }
+    
+    // 显示指定步骤
+    function showStep(stepNumber) {
+      // 更新按钮状态
+      document.querySelectorAll('.step-btn').forEach(btn => {
+        btn.classList.remove('step-active');
+        btn.querySelector('div').classList.remove('step-active');
+      });
+      
+      const activeButton = document.querySelector(`.step-btn[data-step="${stepNumber}"]`);
+      if (activeButton) {
+        activeButton.classList.add('step-active');
+        activeButton.querySelector('div').classList.add('step-active');
+      }
+      
+      // 更新内容显示
+      document.querySelectorAll('.step-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      const activeContent = document.querySelector(`.step-content[data-step="${stepNumber}"]`);
+      if (activeContent) {
+        activeContent.classList.add('active');
+      }
+    }
+    
+    // 渲染联系方式
+    function renderContactInfo() {
+      const contactInfoSection = document.getElementById('contact-info-section');
+      
+      // 清空现有内容
+      if (contactInfoSection) contactInfoSection.innerHTML = '';
+      
+      // 获取当前语言的联系信息
+      const contacts = contactData[currentLang] || contactData['zh'] || [
+        {
+          "title": "TikTok",
+          "content": "@fairylove_nail",
+          "icon": "fa-music"
+        },
+        {
+          "title": "WhatsApp",
+          "content": "+86 138 0000 0000",
+          "icon": "fa-whatsapp"
+        }
+      ];
+      
+      // 渲染联系我们页面中的联系方式
+      if (contactInfoSection) {
+        contacts.forEach(contact => {
+          const div = document.createElement('div');
+          div.className = 'flex items-start';
+          div.innerHTML = `
+            <div class="bg-primary/20 p-2 rounded-full mr-3">
+              <i class="fa ${contact.icon || 'fa-info'} text-primary"></i>
+            </div>
+            <div>
+              <h4 class="font-bold mb-1">${contact.title || '联系方式'}</h4>
+              <p class="text-gray-600 text-sm">${contact.content || '联系信息'}</p>
+            </div>
+          `;
+          contactInfoSection.appendChild(div);
+        });
+      }
+    }
+    
+    // 渲染二维码
+    function renderQrcodes() {
+      const qrcodeContainer = document.getElementById('qrcode-container');
+      if (!qrcodeContainer) return;
+      
+      qrcodeContainer.innerHTML = '';
+      
+      // 获取当前语言的二维码信息
+      const qrcodes = qrcodeData[currentLang] || qrcodeData['zh'] || [
+        {
+          "name": "TikTok",
+          "image": ""
+        },
+        {
+          "name": "WhatsApp",
+          "image": ""
+        }
+      ];
+      
+      qrcodes.forEach(qrcode => {
+        const div = document.createElement('div');
+        div.className = 'bg-white p-3 rounded-lg shadow-sm text-center';
+        // 从配置数据获取图片路径并添加前缀
+        const imagePath = getImagePath(qrcode.image || '');
+
+        div.innerHTML = `
+            <div class="relative w-full border border-gray-200 rounded-lg overflow-hidden">
+              <img src="${imagePath}" 
+                   alt="${qrcode.name || 'QR Code'}" 
+                   class="w-full h-auto" onload="setupImageErrorHandling(this)">
+              <div class="absolute inset-0 flex items-center justify-center bg-gray-50 hidden" id="qrcode-img-error-${qrcode.name.replace(/\s+/g, '-')}">
+                <p class="text-center text-gray-500">图片加载失败</p>
+              </div>
+            </div>
+            <p class="text-sm font-medium mt-2">${qrcode.name || '扫码联系'}</p>
+          `;
+          qrcodeContainer.appendChild(div);
+        });
+      }
+    
+    // 渲染底部banner
+    function renderBanner() {
+      const bottomBanner = document.getElementById('bottom-banner');
+      if (!bottomBanner) return;
+      
+      // 获取当前语言的banner信息
+      const banner = footerBannerData[currentLang] || footerBannerData['zh'] || {
+        "image": "",
+        "altText": "Fairy love promotion"
+      };
+      
+      bottomBanner.innerHTML = `
+        <div class="relative w-full h-40 border border-gray-200 rounded-lg overflow-hidden">
+          <img src="${getImagePath(banner.image || '')}" 
+               alt="${banner.altText || 'Promotion banner'}" 
+               class="w-full h-full object-cover" onload="setupImageErrorHandling(this)">
+          <div id="banner-error" class="absolute inset-0 flex items-center justify-center bg-gray-50 hidden">
+            <p class="text-center text-gray-500">图片加载失败</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    // 切换语言
+    function switchLanguage(lang) {
+      if (lang === currentLang) return;
+      
+      currentLang = lang;
+      
+      // 更新语言按钮状态
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('lang-active');
+      });
+      document.getElementById(`lang-${lang}`).classList.add('lang-active');
+      
+      // 隐藏所有语言元素
+      document.querySelectorAll('.lang-zh, .lang-en').forEach(el => {
+        el.classList.add('hidden');
+      });
+      
+      // 显示当前语言元素
+      document.querySelectorAll(`.lang-${lang}`).forEach(el => {
+        el.classList.remove('hidden');
+      });
+      
+      // 重新渲染所有需要国际化的内容
+      renderTopBanner();
+      renderProcessSteps();
+      renderProducts();
+      renderContactInfo();
+      renderQrcodes();
+      renderBanner();
+      extractAndRenderFilters();
+    }
+    
+    // 视图切换功能
+    const htmlElement = document.documentElement;
+    const viewToggle = document.getElementById('view-toggle');
+    const toggleIcon = viewToggle.querySelector('i');
+    
+    // 处理视图切换的函数
+      function handleViewToggle() {
+        if (htmlElement.classList.contains('mobile-view')) {
+          // 切换到桌面视图
+          htmlElement.classList.remove('mobile-view');
+          htmlElement.classList.add('desktop-view');
+          toggleIcon.classList.remove('fa-desktop');
+          toggleIcon.classList.add('fa-mobile');
+        } else {
+          // 切换到移动视图
+          htmlElement.classList.remove('desktop-view');
+          htmlElement.classList.add('mobile-view');
+          toggleIcon.classList.remove('fa-mobile');
+          toggleIcon.classList.add('fa-desktop');
+        }
+      }
+      
+      // 为视图切换按钮添加点击事件
+      viewToggle.addEventListener('click', () => {
+        handleViewToggle();
+        
+        // 通过添加和移除一个临时类来强制重绘按钮
+        viewToggle.classList.add('tmp-redraw');
+        
+        // 使用setTimeout确保有足够时间让浏览器处理状态变化
+        // 增加延迟时间到100ms以确保在移动设备上有足够反应时间
+        setTimeout(() => {
+          // 确保按钮失去焦点
+          viewToggle.blur();
+          
+          // 移除临时类
+          viewToggle.classList.remove('tmp-redraw');
+        }, 100);
+      });
+      
+      // 添加触摸事件处理以增强移动端支持
+      viewToggle.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        handleViewToggle();
+        
+        // 通过添加和移除一个临时类来强制重绘按钮
+        viewToggle.classList.add('tmp-redraw');
+        
+        // 使用setTimeout确保有足够时间让浏览器处理状态变化
+        setTimeout(() => {
+          // 确保按钮失去焦点
+          viewToggle.blur();
+          
+          // 移除临时类
+          viewToggle.classList.remove('tmp-redraw');
+        }, 100);
+      });
+    
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (navbar && window.scrollY > 50) {
+        navbar.classList.add('bg-dark/90', 'shadow-lg');
+        navbar.classList.remove('bg-transparent');
+      } else if (navbar) {
+        navbar.classList.remove('bg-dark/90', 'shadow-lg');
+        navbar.classList.add('bg-transparent');
+      }
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 20,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 渲染商品列表
+    function renderProducts(products = null, append = false) {
+      const productsGrid = document.getElementById('products-grid');
+      if (!productsGrid) return;
+      
+      console.log('开始渲染商品列表...');
+      
+      // 如果不是追加模式，则清空网格并重置当前页码
+      if (!append) {
+        productsGrid.innerHTML = '';
+        currentPage = 1;
+      }
+
+      // 存储所有商品数据
+      allProducts = products || productData;
+      filteredProducts = allProducts; // 更新筛选后的商品数据
+      
+      // 如果没有传入筛选后的商品，则使用全部商品
+      const productsToRender = products || productData;
+      
+      // 检查是否有商品数据
+    console.log('渲染前的商品数据量:', Object.keys(productsToRender).length);
+    if (Object.keys(productsToRender).length === 0) {
+        // 显示无商品提示
+        productsGrid.innerHTML = `
+          <div class="col-span-full text-center py-10">
+            <p class="text-gray-500 lang-zh">暂无商品数据，请稍后再试</p>
+            <p class="text-gray-500 lang-en hidden">No product data available, please try again later</p>
+          </div>
+        `;
+        return;
+      }
+      
+      console.log('商品数量:', Object.keys(productsToRender).length);
+      
+      // 获取当前页应该显示的商品
+      const productKeys = Object.keys(productsToRender);
+      const startIndex = (currentPage - 1) * productsPerPage;
+      const endIndex = append ? productKeys.length : Math.min(startIndex + productsPerPage, productKeys.length);
+      const currentPageProducts = productKeys.slice(startIndex, endIndex);
+
+      // 遍历当前页商品并生成HTML
+      currentPageProducts.forEach(productName => {
+        const product = productsToRender[productName];
+        console.log('处理商品:', productName);
+        console.log('商品图片数据:', product.image);
+        console.log('商品image属性:', product.image);
+        const imagePath = getImagePath(product.image || '');
+        console.log('生成的图片路径:', imagePath);
+        
+        const productInfo = product.txtContent?.[currentLang] || product.txtContent?.['zh'] || {
+          "商品名称": "美甲款式",
+          "规格库编号": "FL000",
+          "价格": "¥0",
+          "形状": "圆形",
+          "风格": "简约",
+          "标签": ["默认"],
+          "制作难度": "简单"
+        };
+        
+        // 创建标签HTML
+        let tagsHtml = '';
+        (productInfo.标签 || ["默认"]).forEach(tag => {
+          tagsHtml += `<span class="tag bg-primary/20 text-accent mr-1 mb-1">${tag}</span>`;
+        });
+        
+        // 创建商品卡片
+        const productCard = document.createElement('div');
+        productCard.className = 'bg-light rounded-xl overflow-hidden shadow-md card-hover';
+        productCard.setAttribute('data-shape', productInfo.形状);
+        // 为每个标签添加数据属性（替换所有非字母数字字符为连字符确保属性名有效）
+        (productInfo.标签 || []).forEach(tag => {
+          const validTag = tag.replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-'); // 替换所有非字母数字字符为连字符，并合并多个连字符
+          productCard.setAttribute(`data-tag-${validTag}`, true);
+        });
+        productCard.setAttribute('data-difficulty', productInfo.制作难度);
+        
+        // 商品卡片内容
+        productCard.innerHTML = `
+          <div class="relative overflow-hidden">
+            <!-- 使用aspect-ratio保持一致的宽高比例，以PC端为准 -->
+            <div class="relative w-full aspect-[4/3] border border-gray-200 rounded-lg overflow-hidden">
+              <div class="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded z-10">
+                ${productInfo.编号 || productInfo.Number}
+              </div>
+              <img src="${getImagePath(product.image || '')}" 
+                   alt="${productName}" 
+                   class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" onload="setupImageErrorHandling(this)">
+              <div class="absolute inset-0 flex items-center justify-center bg-gray-50 hidden" id="product-img-error-${productName.replace(/\s+/g, '-')}">
+                <p class="text-center text-gray-500">图片加载失败</p>
+              </div>
+            </div>
+
+          </div>
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-bold text-base">${productInfo.商品名称}</h3>
+              <span class="text-accent font-bold">${productInfo.价格}</span>
+            </div>
+            
+            <!-- 标签展示 -->
+            <div class="flex flex-wrap mb-3">
+              ${tagsHtml}
+            </div>
+            
+
+            
+            <div class="grid grid-cols-2 gap-3">
+              <button class="bg-gray-200 hover:bg-gray-300 text-dark font-medium py-2 rounded-lg transition-colors text-sm" onclick="showSpecification('${productInfo.规格库编号}', '${productInfo.商品名称}')">
+                <i class="fa fa-eye mr-1"></i> 
+                <span class="lang-zh ${currentLang === 'en' ? 'hidden' : ''}">查看详情</span>
+                <span class="lang-en ${currentLang === 'zh' ? 'hidden' : ''}">View Details</span>
+              </button>
+              <button class="bg-primary hover:bg-primary/90 text-dark font-medium py-2 rounded-lg transition-colors text-sm 预约-button">
+                <span class="lang-zh ${currentLang === 'en' ? 'hidden' : ''}">立即预约</span>
+                <span class="lang-en ${currentLang === 'zh' ? 'hidden' : ''}">Book Now</span>
+              </button>
+            </div>
+          </div>
+        `;
+        
+        productsGrid.appendChild(productCard);
+      });
+      
+      console.log('商品列表渲染完成');
+
+      // 显示或隐藏加载更多按钮
+      const loadMoreBtn = document.querySelector('.text-center.mt-10 button');
+      if (loadMoreBtn) {
+        if (Object.keys(productsToRender).length <= currentPage * productsPerPage) {
+          loadMoreBtn.classList.add('hidden');
+        } else {
+          loadMoreBtn.classList.remove('hidden');
+        }
+      }
+
+      // 为所有预约按钮添加点击事件
+      document.querySelectorAll('.预约-button').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelector('#contact').scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+    }
+    
+    // 筛选功能
+    let currentShapeFilter = 'all';
+    let currentTagFilter = 'all';
+    
+    // 应用筛选
+    function applyFilters() {
+      // 创建筛选后的商品对象
+      const filteredProducts = {};
+      
+      console.log('应用筛选 - 当前形状筛选:', currentShapeFilter);
+      console.log('应用筛选 - 当前标签筛选:', currentTagFilter);
+      
+      // 显示当前筛选条件
+      const filterStatus = document.getElementById('filter-status');
+      if (filterStatus) {
+        filterStatus.innerHTML = `
+          <p class="text-sm text-gray-500">
+            <span class="lang-zh ${currentLang === 'en' ? 'hidden' : ''}">当前筛选: 形状 - ${currentShapeFilter === 'all' ? '全部' : currentShapeFilter}, 标签 - ${currentTagFilter === 'all' ? '全部' : currentTagFilter}</span>
+            <span class="lang-en ${currentLang === 'zh' ? 'hidden' : ''}">Current filters: Shape - ${currentShapeFilter === 'all' ? 'All' : currentShapeFilter}, Tag - ${currentTagFilter === 'all' ? 'All' : currentTagFilter}</span>
+          </p>
+        `;
+      }
+      
+      console.log('开始筛选商品...');
+      let visibleCount = 0;
+      Object.keys(productData).forEach(productName => {
+        const product = productData[productName];
+        const productInfo = product.txtContent?.[currentLang] || product.txtContent?.['zh'] || {};
+
+        console.log('\n--- 处理商品:', productName, '---');
+        console.log('商品数据:', product);
+        console.log('当前语言:', currentLang);
+        console.log('商品信息:', productInfo);
+        console.log('形状筛选值:', currentShapeFilter);
+        console.log('标签筛选值:', currentTagFilter);
+
+        // 检查是否符合筛选条件
+        const shapeMatch = currentShapeFilter === 'all' || productInfo.形状 === currentShapeFilter;
+        // 检查是否符合标签筛选条件
+        const tagMatch = currentTagFilter === 'all' || productInfo.标签?.includes(currentTagFilter) || false;
+
+        console.log('形状匹配:', shapeMatch, '商品形状:', productInfo.形状);
+        console.log('标签匹配:', tagMatch, '商品标签:', productInfo.标签);
+
+        if (shapeMatch && tagMatch) {
+          filteredProducts[productName] = product;
+          visibleCount++;
+          console.log('商品通过筛选条件，当前可见商品数:', visibleCount);
+        } else {
+          console.log('商品未通过筛选条件');
+        }
+      });
+      
+      console.log('筛选后的商品数量:', Object.keys(filteredProducts).length);
+      
+      // 重新渲染筛选后的商品
+      renderProducts(filteredProducts);
+    }
+    
+    // 规格详情模态框
+    const specModal = document.getElementById('spec-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-content');
+    const closeModal = document.getElementById('close-modal');
+    
+    // 截断字符串辅助函数
+    function truncateString(str, maxLength) {
+      if (str.length <= maxLength) return str;
+      return str.substring(0, maxLength) + '...';
+    }
+
+    // 显示规格详情
+    function showSpecification(specId, productName) {
+      // 诊断日志
+      console.log('查看规格详情 - specId:', specId);
+      console.log('规格数据是否存在:', specificationData !== undefined);
+      console.log('规格数据中的键:', specificationData ? Object.keys(specificationData) : '无数据');
+      
+      const spec = specificationData[specId] || {
+        "images": []
+      };
+      
+      console.log('找到的规格数据:', spec);
+      console.log('规格图片数量:', spec.images ? spec.images.length : 0);
+      
+      // 截断过长的商品名称
+      const truncatedName = truncateString(productName, 26);
+      
+      // 设置标题为截断后的商品名称
+      modalTitle.innerHTML = `
+        <span class="lang-zh ${currentLang === 'en' ? 'hidden' : ''}">${truncatedName}</span>
+        <span class="lang-en ${currentLang === 'zh' ? 'hidden' : ''}">${truncatedName}</span>
+      `;
+      
+      // 生成图片画廊
+      let imagesHtml = '';
+      (spec.images || []).forEach((image, index) => {
+          // 添加图片路径前缀
+          const imagePath = getImagePath(image || '');
+          imagesHtml += `
+            <div class="relative rounded-lg overflow-hidden">
+              <img src="${imagePath}" alt="规格图片 ${index + 1}" class="w-full h-auto" onload="setupImageErrorHandling(this)">
+              <div class="absolute inset-0 flex items-center justify-center bg-gray-50 hidden" id="spec-img-error-${index}">
+                <p class="text-center text-gray-500">图片加载失败</p>
+              </div>
+            </div>
+          `;
+        });
+
+      // 如果没有图片数据
+      if (imagesHtml === '') {
+        imagesHtml = `
+          <div class="relative rounded-lg overflow-hidden h-48 flex items-center justify-center bg-gray-50">
+            <p class="text-center text-gray-500">暂无图片数据</p>
+          </div>
+        `;
+      }
+      
+      modalContent.innerHTML = `
+        <div class="space-y-0">
+          ${imagesHtml}
+        </div>
+      `;
+      
+      specModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // 防止背景滚动
+    }
+    
+    // 关闭模态框
+    closeModal.addEventListener('click', () => {
+      specModal.classList.add('hidden');
+      document.body.style.overflow = ''; // 恢复滚动
+    });
+    
+    // 点击模态框外部关闭
+    specModal.addEventListener('click', (e) => {
+      if (e.target === specModal) {
+        specModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // 语言切换函数
+    function switchLanguage(lang) {
+      currentLang = lang;
+      console.log('切换语言为:', lang);
+      
+      // 更新语言切换按钮样式
+      const zhBtn = document.getElementById('lang-zh');
+      const enBtn = document.getElementById('lang-en');
+      
+      // 移除所有按钮的选中状态
+      zhBtn.classList.remove('lang-active', 'bg-white');
+      zhBtn.classList.add('bg-gray-200');
+      enBtn.classList.remove('lang-active', 'bg-white');
+      enBtn.classList.add('bg-gray-200');
+      
+      // 添加当前选中按钮的样式
+      if (lang === 'zh') {
+        zhBtn.classList.add('lang-active', 'bg-white');
+        zhBtn.classList.remove('bg-gray-200');
+      } else {
+        enBtn.classList.add('lang-active', 'bg-white');
+        enBtn.classList.remove('bg-gray-200');
+      }
+      
+      // 显示对应语言的内容
+      document.querySelectorAll('.lang-zh').forEach(el => {
+        el.classList.toggle('hidden', lang === 'en');
+      });
+      
+      document.querySelectorAll('.lang-en').forEach(el => {
+        el.classList.toggle('hidden', lang === 'zh');
+      });
+      
+      // 更新筛选状态显示
+      applyFilters();
+      
+      // 重新渲染筛选按钮和页面元素
+      extractAndRenderFilters();
+      renderTopBanner();
+      renderProcessSteps();
+      renderProducts();
+      renderContactInfo();
+      renderQrcodes();
+      renderBanner();
+    }
+    
+    // 语言切换按钮事件
+    document.getElementById('lang-zh').addEventListener('click', () => {
+      switchLanguage('zh');
+    });
+    
+    document.getElementById('lang-en').addEventListener('click', () => {
+      switchLanguage('en');
+    });
+    
+        // 全局变量存储当前语言和配置数据
+    let currentLang = 'zh';
+    let processData = {};
+    let productData = {};
+    let specificationData = {};
+    let contactData = {};
+    let qrcodeData = {};
+    let topBannerData = {};
+    let footerBannerData = {};
+
+    // 分页相关变量
+    const productsPerPage = 8; // 每页显示8个商品
+    let currentPage = 1; // 当前页码
+    let allProducts = {}; // 存储所有商品数据
+    let filteredProducts = {}; // 存储筛选后的商品数据
+
+    // 检测设备类型并切换视图
+    function detectDeviceAndSwitchView() {
+      const htmlElement = document.documentElement;
+      const viewToggle = document.getElementById('view-toggle');
+      const toggleIcon = viewToggle.querySelector('i');
+      
+      // 检测是否为移动设备
+      const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // 移动设备保持移动视图
+        htmlElement.classList.remove('desktop-view');
+        htmlElement.classList.add('mobile-view');
+        toggleIcon.classList.remove('fa-mobile');
+        toggleIcon.classList.add('fa-desktop');
+      } else {
+        // PC设备切换到桌面视图
+        htmlElement.classList.remove('mobile-view');
+        htmlElement.classList.add('desktop-view');
+        toggleIcon.classList.remove('fa-desktop');
+        toggleIcon.classList.add('fa-mobile');
+      }
+    }
+
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', () => {
+      // 初始化导航状态
+      if (window.scrollY > 50 && navbar) {
+        navbar.classList.add('bg-dark/90', 'shadow-lg');
+        navbar.classList.remove('bg-transparent');
+      }
+      
+      // 调用外部定义的loadConfigData函数加载配置数据
+      loadConfigData();
+      
+      // 使用switchLanguage函数设置默认语言为英语
+      switchLanguage('en');
+      
+      // 检测设备并切换视图
+      detectDeviceAndSwitchView();
+    });
+  </script>
+</body>
+</html>

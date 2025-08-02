@@ -1,0 +1,78 @@
+{
+  "zh": [
+    {
+      "step": 1,
+      "title": "浏览款式并选择喜欢的设计",
+      "shortTitle": "选择款式",
+      "icon": "fa-th-large",
+      "description": "在我们的款式展示中浏览各种精美的美甲设计，找到您喜欢的款式并记录下对应的编号。",
+      "image": "images/products/BZ01.jpg",
+      "tips": "您可以根据形状、风格进行筛选<br>注意：由于纯手工制作，实际效果可能与展示效果有细微差异"
+    },
+    {
+      "step": 2,
+      "title": "通过社交媒体联系我们",
+      "shortTitle": "联系我们",
+      "icon": "fa-comments",
+      "description": "通过TikTok或WhatsApp联系我们的客服，告知您选择的款式编号和收货地址。",
+      "image": "images/products/BZ02.jpg",
+      "tips": "联系方式<br>WhatsApp：+86 176 2350 9617<br>www.tiktok.com/@fairylove1314"
+    },
+    {
+      "step": 3,
+      "title": "确认订单并完成支付",
+      "shortTitle": "确认支付",
+      "icon": "fa-check-circle",
+      "description": "我们会与您确认订单详情，包括款式、价格和配送信息。确认后请完成支付流程。",
+      "image": "images/products/BZ03.jpg",
+      "tips": "支持多种支付方式，支付成功后将发送订单确认"
+    },
+    {
+      "step": 4,
+      "title": "制作完成并安排发货",
+      "shortTitle": "发货配送",
+      "icon": "fa-truck",
+      "description": "我们会在约定时间内完成美甲制作，并通过国际快递发送给您，同时提供物流追踪信息。",
+      "image": "images/products/BZ04.jpg",
+      "tips": "一般8-15个工作日送达，请耐心等待"
+    }
+  ],
+  "en": [
+    {
+      "step": 1,
+      "title": "Browse designs and choose your favorite",
+      "shortTitle": "Choose Design",
+      "icon": "fa-th-large",
+      "description": "Browse through our collection of exquisite nail designs, find your favorite and note down the corresponding ID.",
+      "image": "images/products/BZ01.jpg",
+      "tips": "You can filter by shape and style<br>Note: Due to the manual nature of the production process, the actual effect may differ slightly from the displayed effect."
+    },
+    {
+      "step": 2,
+      "title": "Contact us via social media",
+      "shortTitle": "Contact Us",
+      "icon": "fa-comments",
+      "description": "Contact our customer service via TikTok or WhatsApp, inform us of your chosen design ID and delivery address.",
+      "image": "images/products/BZ02.jpg",
+      "tips": "Contact Information<br>WhatsApp：+86 176 2350 9617<br>www.tiktok.com/@fairylove1314"
+    },
+    {
+      "step": 3,
+      "title": "Confirm order and complete payment",
+      "shortTitle": "Payment",
+      "icon": "fa-check-circle",
+      "description": "We will confirm your order details, including design, price and delivery information. Please complete the payment process after confirmation.",
+      "image": "images/products/BZ03.jpg",
+      "tips": "Multiple payment methods are supported, and an order confirmation will be sent after successful payment"
+    },
+    {
+      "step": 4,
+      "title": "Production complete and shipping arranged",
+      "shortTitle": "Shipping",
+      "icon": "fa-truck",
+      "description": "We will complete the production process within the agreed time and send it to you by international express, with logistics tracking information provided.",
+      "image": "images/products/BZ04.jpg",
+      "tips": "It will generally be delivered within 8 to 15 working days. Please be patient."
+    }
+  ]
+}
