@@ -2298,8 +2298,6 @@ var _hmt = _hmt || [];
       currentTagFilter = 'all';
 
       // 更新所有筛选状态显示
-      applyFilters();
-
       // 直接更新移动端筛选状态显示
       const mobileFilterStatus = document.getElementById('mobile-filter-status');
       if (mobileFilterStatus) {
@@ -2348,11 +2346,13 @@ var _hmt = _hmt || [];
     }
     
     // 语言切换按钮事件
-    document.getElementById('lang-zh').addEventListener('click', () => {
+    document.getElementById('lang-zh').addEventListener('click', (e) => {
+      e.preventDefault();
       switchLanguage('zh');
     });
     
-    document.getElementById('lang-en').addEventListener('click', () => {
+    document.getElementById('lang-en').addEventListener('click', (e) => {
+      e.preventDefault();
       switchLanguage('en');
     });
     
