@@ -82,6 +82,11 @@
       display: none !important;
     }
     
+    /* 移动端控制按钮过渡效果 */
+    .fixed.top-4 {
+      transition: transform 0.3s linear;
+    }
+    
     /* 移动端默认样式 */
     .mobile-view .container {
       max-width: 100% !important;
@@ -571,6 +576,20 @@ var _hmt = _hmt || [];
           <div class="mt-6" id="bottom-banner">
             <!-- 底部banner将通过JavaScript动态加载 -->
           </div>
+
+          <h3 class="text-xl font-bold mt-8 mb-4">
+            <span class="lang-zh">TikTok主页</span>
+            <span class="lang-en hidden">TikTok Homepage</span>
+          </h3>
+
+          <!-- TikTok嵌入代码 -->
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@fairylove888" data-unique-id="fairylove888" data-embed-type="creator" style="max-width: 780px; min-width: 288px;" >
+            <section>
+              <a target="_blank" href="https://www.tiktok.com/@fairylove888?refer=creator_embed">@fairylove888</a>
+            </section>
+          </blockquote>
+          <script async src="https://www.tiktok.com/embed.js"></script>
+
         </div>
       </div>
     </section>
@@ -712,8 +731,7 @@ var _hmt = _hmt || [];
             { name: 'product', path: 'config/products.json' },  // 修改为单数形式，以匹配window.productData
             { name: 'specifications', path: 'config/specifications.json' },
             { name: 'contact', path: 'config/contact.json' },
-            { name: 'qrcode', path: 'config/qrcode.json' },
-            { name: 'banner', path: 'config/footer-banner.json' }
+            { name: 'qrcode', path: 'config/qrcode.json' }
           ];
           
           // 逐一加载并显示状态
@@ -890,10 +908,6 @@ var _hmt = _hmt || [];
           specificationData = window.specificationsData;
           console.log('显式赋值后规格数据数量:', Object.keys(specificationData || {}).length);
 
-          // 显式将window.bannerData赋值给footerBannerData
-          footerBannerData = window.bannerData;
-          console.log('显式赋值后底部横幅数据:', Object.keys(footerBannerData || {}).length);
-
           // 输出产品数据，查看是否正确加载
           console.log('产品数据是否存在:', Object.keys(productData).length > 0);
           console.log('产品数据数量:', Object.keys(productData).length);
@@ -907,7 +921,6 @@ var _hmt = _hmt || [];
           renderProducts();
           renderContactInfo();
           renderQrcodes();
-          renderBanner();
           
         } catch (error) {
           console.error('❌ 配置文件加载失败:', error.message);
@@ -1304,7 +1317,6 @@ var _hmt = _hmt || [];
       renderProducts();
       renderContactInfo();
       renderQrcodes();
-      renderBanner();
     }
     
     // 处理图片路径的辅助函数
@@ -1333,6 +1345,11 @@ var _hmt = _hmt || [];
       // 如果图片路径已经包含images/，则直接返回
       if (normalizedImage.startsWith('images/')) {
         console.log('使用已有路径:', normalizedImage);
+        // 对于banner图片，我们不添加缓存参数
+        if (normalizedImage.includes('banners/')) {
+          console.log('banner图片不添加缓存参数:', normalizedImage);
+          return normalizedImage;
+        }
         return normalizedImage + cacheBuster;
       }
       // 否则添加正确的前缀
@@ -1623,29 +1640,6 @@ var _hmt = _hmt || [];
         });
       }
     
-    // 渲染底部banner
-    function renderBanner() {
-      const bottomBanner = document.getElementById('bottom-banner');
-      if (!bottomBanner) return;
-      
-      // 获取当前语言的banner信息
-      const banner = footerBannerData[currentLang] || footerBannerData['zh'] || {
-        "image": "",
-        "altText": "Fairy love promotion"
-      };
-      
-      bottomBanner.innerHTML = `
-        <div class="relative w-full h-40 border border-gray-200 rounded-lg overflow-hidden">
-          <img src="${getImagePath(banner.image || '')}" 
-               alt="${banner.altText || 'Promotion banner'}" 
-               class="w-full h-full object-cover" onload="setupImageErrorHandling(this)">
-          <div id="banner-error" class="absolute inset-0 flex items-center justify-center bg-gray-50 hidden">
-            <p class="text-center text-gray-500">图片加载失败</p>
-          </div>
-        </div>
-      `;
-    }
-    
     // 切换语言
     function switchLanguage(lang) {
       if (lang === currentLang) return;
@@ -1674,8 +1668,7 @@ var _hmt = _hmt || [];
       renderProducts();
       renderContactInfo();
       renderQrcodes();
-      renderBanner();
-      extractAndRenderFilters();
+        extractAndRenderFilters();
     }
     
     // 视图切换功能
@@ -2096,7 +2089,6 @@ var _hmt = _hmt || [];
       renderProducts();
       renderContactInfo();
       renderQrcodes();
-      renderBanner();
     }
     
     // 语言切换按钮事件
@@ -2116,7 +2108,6 @@ var _hmt = _hmt || [];
     let contactData = {};
     let qrcodeData = {};
     let topBannerData = {};
-    let footerBannerData = {};
 
     // 分页相关变量
     const productsPerPage = 8; // 每页显示8个商品
@@ -2149,6 +2140,37 @@ var _hmt = _hmt || [];
     }
 
     // 页面加载完成后执行
+    // 移动端滚动显示/隐藏控制
+    let lastScrollTop = 0;
+    const langButtons = document.querySelector('.fixed.top-4.left-4');
+    const mobileViewToggle = document.getElementById('view-toggle');
+    const scrollThreshold = 10; // 滚动阈值
+
+    // 处理滚动事件
+    function handleScroll() {
+      const st = window.pageYOffset || document.documentElement.scrollTop;
+      const htmlElement = document.documentElement;
+      const isMobileView = htmlElement.classList.contains('mobile-view');
+
+      if (isMobileView) {
+        if (st > lastScrollTop && st > scrollThreshold) {
+          // 向上滚动
+          langButtons.style.transform = 'translateY(-100px)';
+          mobileViewToggle.style.transform = 'translateY(-100px)';
+        } else if (st < lastScrollTop) {
+          // 向下滚动
+          langButtons.style.transform = 'translateY(0)';
+          mobileViewToggle.style.transform = 'translateY(0)';
+        }
+      } else {
+        // 非移动视图保持默认显示
+        langButtons.style.transform = 'translateY(0)';
+        mobileViewToggle.style.transform = 'translateY(0)';
+      }
+
+      lastScrollTop = st <= 0 ? 0 : st; // 避免出现负数
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // 初始化导航状态
       if (window.scrollY > 50 && navbar) {
@@ -2164,7 +2186,11 @@ var _hmt = _hmt || [];
       
       // 检测设备并切换视图
       detectDeviceAndSwitchView();
+
+      // 添加滚动事件监听
+      window.addEventListener('scroll', handleScroll);
     });
   </script>
+
 </body>
 </html>
